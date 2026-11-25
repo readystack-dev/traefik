@@ -1,6 +1,6 @@
-image_manifest_digest=sha256:065141024d7a6cae6a2288f425f0587511e9e913dd3db36ab51be39560047413
-config_digest=sha256:1210f82b7e994b10cf2f5aa44b8c69f04c76309a302e932fcfdfb84411c54127
-tag=readystack/traefik:v3.7.19-CE-ubuntu24.04-r1
+image_manifest_digest=sha256:a7980372e214b6e7f5977a1c83fa495da0bb2c54dd5ae88a101398776962dfc5
+config_digest=sha256:d8ed0a121b3b0d24fb3030bb2f3b2ed741c9f696c98d466d808358b2ee29767c
+tag=readystack/traefik:v3.8.0-CE-ubuntu24.04-r1
 probe_port=8080
 probe_path=/ping
 probe_timeout=180

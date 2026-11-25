@@ -6,9 +6,9 @@
       "ref": "golang:1.27.4-bookworm@sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea"
     },
     {
-      "digest": "sha256:77eb101c607d6e3d4f5ad0c8a02c2136c689b98aba1f359e6502ba517e5c57ec",
-      "layout": "bases/ubuntu_24.04_2198e4c65076.oci",
-      "ref": "ubuntu:24.04@sha256:2198e4c65076e9cb0b3d695219df667c0e3b0072da64ca3c2648aca17dcecaf5"
+      "digest": "sha256:9a04f13b3f80ef056361e30868593b1cfd2279fe19e4081cb93a90bf56819d6a",
+      "layout": "bases/ubuntu_24.04_9c7f200c07e3.oci",
+      "ref": "ubuntu:24.04@sha256:9c7f200c07e3d4a03e7249d2c16bf66a51120fb876aa2242cf31451412543289"
     }
   ],
   "engine": {
@@ -21,8 +21,8 @@
     "context": ".",
     "dockerfile": "Dockerfile.offline.pinned",
     "mtime_policy": "clamp",
-    "source_date_epoch": 1794880034,
-    "tree_hash": "sha256:7992c7d89ea36cfd94717775dd6d503c7ba5a59baab72d54351c003f75941517"
+    "source_date_epoch": 1795577779,
+    "tree_hash": "sha256:c93f3309df934ade298db31a08ef0baeb66744327fdc0bb898866cb8e54ae639"
   },
   "probe": {
     "http_path": "/ping",
@@ -31,8 +31,8 @@
   },
   "schema": "readystack-rebuild-bundle/v0.1",
   "subject": {
-    "config_digest": "sha256:1210f82b7e994b10cf2f5aa44b8c69f04c76309a302e932fcfdfb84411c54127",
-    "image_manifest_digest": "sha256:065141024d7a6cae6a2288f425f0587511e9e913dd3db36ab51be39560047413",
-    "name": "docker.io/readystack/traefik:v3.7.19-CE-ubuntu24.04-r1"
+    "config_digest": "sha256:d8ed0a121b3b0d24fb3030bb2f3b2ed741c9f696c98d466d808358b2ee29767c",
+    "image_manifest_digest": "sha256:a7980372e214b6e7f5977a1c83fa495da0bb2c54dd5ae88a101398776962dfc5",
+    "name": "docker.io/readystack/traefik:v3.8.0-CE-ubuntu24.04-r1"
   }
 }

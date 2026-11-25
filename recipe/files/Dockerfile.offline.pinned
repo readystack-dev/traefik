@@ -10,7 +10,7 @@ FROM golang:1.27.4-bookworm@sha256:4fa7c968ba93f1635670522dbb01a2c78150443e13857
 WORKDIR /src
 COPY vendored/traefik-src/ .
 ENV CGO_ENABLED=0 GOTOOLCHAIN=local GOFLAGS="-mod=vendor -buildvcs=false" GOPROXY=off
-RUN go build -trimpath -ldflags='-s -w -X github.com/traefik/traefik/v3/pkg/version.Version=3.7.19' \
+RUN go build -trimpath -ldflags='-s -w -X github.com/traefik/traefik/v3/pkg/version.Version=3.8.0' \
       -o /traefik ./cmd/traefik
 # Fail closed on a stale toolchain. The digest this kit used to pin under the floating 1.26-bookworm tag
 # was go1.26.4 (published 2026-06-11) long after the tag had moved on, so chain 491 shipped
@@ -19,8 +19,8 @@ RUN go build -trimpath -ldflags='-s -w -X github.com/traefik/traefik/v3/pkg/vers
 RUN v=$(go version /traefik | awk '{print $2}') && echo "traefik built with $v" && \
     [ "$(printf '%s\n%s\n' go1.27.4 "$v" | sort -V | head -n1)" = go1.27.4 ] || \
     { echo "traefik was built with '$v', older than the go1.27.4 floor: the golang base digest is stale" >&2; exit 1; }
-RUN /traefik version | tee /tmp/traefik.version && grep -Eq '^Version:[[:space:]]+3\.7\.19$' /tmp/traefik.version || \
-    { echo "built traefik does not report 3.7.19" >&2; exit 1; }
+RUN /traefik version | tee /tmp/traefik.version && grep -Eq '^Version:[[:space:]]+3\.8\.0$' /tmp/traefik.version || \
+    { echo "built traefik does not report 3.8.0" >&2; exit 1; }
 
 # ---- rs-probe: the HEALTHCHECK helper (standard library only, from the kit's rs-probe.go, the engine's
 # generators/gen_dockerfile.py RS_PROBE_GO): the image has no curl, whose library closure alone costs ~21 medium findings
@@ -28,7 +28,7 @@ FROM golang:1.27.4-bookworm@sha256:4fa7c968ba93f1635670522dbb01a2c78150443e13857
 WORKDIR /probe
 COPY rs-probe.go main.go
 COPY rs-probe.mod go.mod
-ENV CGO_ENABLED=0 GOTOOLCHAIN=local GOFLAGS="-buildvcs=false" GOPROXY=off SOURCE_DATE_EPOCH=1794880034
+ENV CGO_ENABLED=0 GOTOOLCHAIN=local GOFLAGS="-buildvcs=false" GOPROXY=off SOURCE_DATE_EPOCH=1795577779
 RUN go build -trimpath -ldflags='-s -w' -o /rs-probe .
 
 # ---- rootfs: the chiselled Ubuntu 24.04 runtime (vendored/chisel, cut by Dockerfile.vendor's chiselcut stage from
@@ -36,8 +36,8 @@ RUN go build -trimpath -ldflags='-s -w' -o /rs-probe .
 # reaches the image. setcap runs from the cut itself (libcap2-bin_bins) under chroot: traefik binds :80/:443 as the
 # non-root traefik user also where the runtime keeps net.ipv4.ip_unprivileged_port_start at 1024; the file
 # capability travels as the security.capability xattr.
-FROM ubuntu:24.04@sha256:2198e4c65076e9cb0b3d695219df667c0e3b0072da64ca3c2648aca17dcecaf5 AS rootfs
-ARG SOURCE_DATE_EPOCH=1794880034
+FROM ubuntu:24.04@sha256:9c7f200c07e3d4a03e7249d2c16bf66a51120fb876aa2242cf31451412543289 AS rootfs
+ARG SOURCE_DATE_EPOCH=1795577779
 ADD vendored/chisel/rootfs.tar /rootfs/
 RUN printf 'traefik:x:999:999::/var/lib/traefik:/bin/sh\n' >> /rootfs/etc/passwd && \
     printf 'traefik:x:999:\n' >> /rootfs/etc/group && \
@@ -59,7 +59,7 @@ RUN --mount=type=bind,source=vendored/chisel,target=/chisel set -eu; \
     rm -rf /rootfs/var/log/dpkg.log /rootfs/var/log/alternatives.log /rootfs/var/log/apt /rootfs/var/cache/ldconfig/aux-cache /rootfs/var/cache/fontconfig
 
 FROM scratch
-ARG SOURCE_DATE_EPOCH=1794880034
+ARG SOURCE_DATE_EPOCH=1795577779
 COPY --from=rootfs /rootfs/ /
 ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s \
@@ -73,6 +73,6 @@ ENTRYPOINT ["traefik","--ping=true","--api.insecure=true","--api.dashboard=true"
 LABEL org.opencontainers.image.licenses="MIT"
 LABEL org.opencontainers.image.title="Traefik"
 LABEL org.opencontainers.image.source="https://github.com/traefik/traefik"
-LABEL org.opencontainers.image.version="v3.7.19-CE-ubuntu24.04-r1"
-LABEL org.opencontainers.image.revision="7dafd6dba371bd1aee70c443c2975c229c969711"
+LABEL org.opencontainers.image.version="v3.8.0-CE-ubuntu24.04-r1"
+LABEL org.opencontainers.image.revision="644b1f19cf031ec079cca10fad0c86e5ab7181b7"
 # <<< readystack OCI labels

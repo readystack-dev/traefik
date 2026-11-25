@@ -34,7 +34,7 @@
     }
   ],
   "build_method": "source-rebuild-go",
-  "chain_id": 1099,
+  "chain_id": 1242,
   "dep_bumps": [
     {
       "module": "golang.org/x/crypto",
@@ -108,15 +108,15 @@
   "slug": "traefik",
   "source": {
     "builder_image": "golang:1.27.4-bookworm",
-    "commit": "7dafd6dba371bd1aee70c443c2975c229c969711",
-    "commit_epoch": 1794478446,
+    "commit": "644b1f19cf031ec079cca10fad0c86e5ab7181b7",
+    "commit_epoch": 1795431133,
     "go_module_root": "github.com/traefik/traefik/v3 (built from the cloned source: go build ./cmd/traefik)",
     "go_version_required": "1.27.0",
-    "ref": "v3.7.19",
+    "ref": "v3.8.0",
     "repo": "https://github.com/traefik/traefik",
-    "source_date_epoch": 1794880034,
+    "source_date_epoch": 1795577779,
     "source_date_epoch_basis": "release-cut",
-    "source_date_epoch_provenance": "the time release v3.7.19-CE-ubuntu24.04-r1 was cut (2026-11-17T01:47:14Z), by scripts/retarget.py: ReadyStack dates an image by when its release was packaged (owner 2026-11-10), recorded here once and used by every rebuild of the release; it builds upstream commit 7dafd6dba371, dated 2026-11-12T10:14:06Z (source.commit_epoch)."
+    "source_date_epoch_provenance": "the time release v3.8.0-CE-ubuntu24.04-r1 was cut (2026-11-25T03:36:19Z), by scripts/retarget.py: ReadyStack dates an image by when its release was packaged (owner 2026-11-10), recorded here once and used by every rebuild of the release; it builds upstream commit 644b1f19cf03, dated 2026-11-23T10:52:13Z (source.commit_epoch)."
   },
-  "version": "v3.7.19"
+  "version": "v3.8.0"
 }

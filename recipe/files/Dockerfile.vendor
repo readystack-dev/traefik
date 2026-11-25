@@ -3,7 +3,7 @@
 # fully-vendored traefik source tree so the offline build needs no network:
 #   - webui      : node24 + yarn4 (corepack) -> webui/static  (vite build,
 #                  outDir ./static). Embedded by webui/embed.go //go:embed static.
-#   - traefik-src: traefik v3.7.19 source with webui/static copied in,
+#   - traefik-src: traefik v3.8.0 source with webui/static copied in,
 #                  grpc + x/crypto x/net x/sys x/text + go-jose/v4, brotli and
 #                  klauspost/compress raised to exact pinned floors (raise-only,
 #                  re-checked by held() after tidy), `go mod vendor`. A sanity `go build ./cmd/traefik`
@@ -19,10 +19,13 @@
 # =====================================================================
 
 # --- 1) Build the dashboard (vite -> webui/static), embedded via go:embed ----
+# Node 24 with its bundled corepack. Upstream builds the dashboard on Node 26 since v3.7.18 (webui/.nvmrc 26.13.0; its
+# webui/buildx.Dockerfile installs corepack 0.36.0 with npm before yarn runs); v3.8.0's webui/ tree (git tree
+# 42c92fea) is unchanged from the 3.7 release this stage built before it, so the Node move is a change of its own.
 FROM node:24-bookworm@sha256:64af3819f9275802414d7cdc38c27e9d82bd564dec4d4da87d008255d36c63b4 AS webui
 WORKDIR /w
-RUN git clone --depth 1 --branch v3.7.19 -q https://github.com/traefik/traefik . && \
-    test "$(git rev-parse HEAD)" = 7dafd6dba371bd1aee70c443c2975c229c969711 && \
+RUN git clone --depth 1 --branch v3.8.0 -q https://github.com/traefik/traefik . && \
+    test "$(git rev-parse HEAD)" = 644b1f19cf031ec079cca10fad0c86e5ab7181b7 && \
     corepack enable && \
     cd webui && yarn install --immutable && yarn build && \
     test -f static/index.html && echo "webui static: $(ls -1 static | wc -l) entries"
@@ -30,14 +33,14 @@ RUN git clone --depth 1 --branch v3.7.19 -q https://github.com/traefik/traefik .
 # --- 2) Vendor the Go module tree (with the prebuilt dashboard embedded) ------
 # Pinned to the SAME toolchain as Dockerfile.offline.pinned. A floating minor tag (1.26-bookworm) resolves to
 # whatever the build host has cached, and the digest this kit used to pin under that tag was go1.26.4.
-# Go 1.27 since v3.7.17: its go.mod says `go 1.27.0` (upstream builds its releases with Go 1.27 from v3.7.17,
-# docs/content/migrate/v3.md), so under GOTOOLCHAIN=local a 1.26 toolchain cannot build it.
+# Go 1.27 since v3.7.17 (upstream builds its releases with Go 1.27 from v3.7.17, docs/content/migrate/v3.md): v3.8.0's
+# go.mod still says `go 1.27.0` and its .go-version `1.27`, so under GOTOOLCHAIN=local a 1.26 toolchain cannot build it.
 FROM golang:1.27.4-bookworm@sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea AS govendor
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 WORKDIR /src
-RUN git clone --depth 1 --branch v3.7.19 -q https://github.com/traefik/traefik . && \
-    test "$(git rev-parse HEAD)" = 7dafd6dba371bd1aee70c443c2975c229c969711
+RUN git clone --depth 1 --branch v3.8.0 -q https://github.com/traefik/traefik . && \
+    test "$(git rev-parse HEAD)" = 644b1f19cf031ec079cca10fad0c86e5ab7181b7
 COPY --from=webui /w/webui/static/ webui/static/
 ENV CGO_ENABLED=0 GOTOOLCHAIN=local
 RUN v=$(go env GOVERSION) && echo "vendor toolchain $v" && \
@@ -69,12 +72,12 @@ RUN floor() { e=$(mktemp); cur=$(go list -mod=mod -m -f '{{.Version}}' "$1" 2>"$
     floor golang.org/x/sys v0.49.0 && \
     floor golang.org/x/text v0.43.0 && floor github.com/go-jose/go-jose/v4 v4.1.6 && \
     floor github.com/andybalholm/brotli v1.2.7 && \
-    floor github.com/klauspost/compress v1.20.3 && \
+    floor github.com/klauspost/compress v1.20.3 && floor go.etcd.io/etcd/client/pkg/v3 v3.7.1 && \
     go mod tidy && \
     held google.golang.org/grpc v1.83.2 && held golang.org/x/crypto v0.58.0 && held golang.org/x/net v0.62.0 && held golang.org/x/sys v0.49.0 && held golang.org/x/text v0.43.0 && held github.com/go-jose/go-jose/v4 v4.1.6 && \
     held github.com/andybalholm/brotli v1.2.7 && held github.com/klauspost/compress v1.20.3 && \
     go mod vendor && \
-    go build -trimpath -ldflags='-s -w -X github.com/traefik/traefik/v3/pkg/version.Version=3.7.19' \
+    go build -trimpath -ldflags='-s -w -X github.com/traefik/traefik/v3/pkg/version.Version=3.8.0' \
         -o /tmp/traefik ./cmd/traefik && \
     /tmp/traefik version && \
     rm -rf .git
@@ -83,7 +86,7 @@ RUN floor() { e=$(mktemp); cur=$(go list -mod=mod -m -f '{{.Version}}' "$1" 2>"$
 #   rejects a nested repo with "another git repository inside your current repository".
 
 # chiselled runtime (runtime_base): the files the slices need, cut from Ubuntu's own .debs by Canonical's chisel
-FROM ubuntu:24.04@sha256:2198e4c65076e9cb0b3d695219df667c0e3b0072da64ca3c2648aca17dcecaf5 AS chiselcut
+FROM ubuntu:24.04@sha256:9c7f200c07e3d4a03e7249d2c16bf66a51120fb876aa2242cf31451412543289 AS chiselcut
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates curl file zstd && rm -rf /var/lib/apt/lists/*
 RUN curl -fsSL -o /tmp/chisel.tgz https://github.com/canonical/chisel/releases/download/v1.5.1/chisel_v1.5.1_linux_amd64.tar.gz && \

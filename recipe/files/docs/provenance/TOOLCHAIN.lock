@@ -1,0 +1,122 @@
+{
+  "apt_refresh": [
+    {
+      "min_version": "2.8.4ubuntu0.1",
+      "package": "apt",
+      "reason": "CVE-2026-109518 (High): apt 2.8.3 -> 2.8.4ubuntu0.1; found by the CVE tick of 2026-11-07 (grype 0.120.1, db built 2026-11-06T06:21Z) on v3.7.16-CE-ubuntu24.04-r1. Mirrored in product-kits/traefik/build/Dockerfile.vendor as a fail-closed check of the dist-upgrade closure (hand kits do not read apt_refresh)."
+    },
+    {
+      "min_version": "2.8.4ubuntu0.1",
+      "package": "libapt-pkg6.0t64",
+      "reason": "CVE-2026-109518 (High): libapt-pkg6.0t64 2.8.3 -> 2.8.4ubuntu0.1; found by the CVE tick of 2026-11-07 (grype 0.120.1, db built 2026-11-06T06:21Z) on v3.7.16-CE-ubuntu24.04-r1. Mirrored in product-kits/traefik/build/Dockerfile.vendor as a fail-closed check of the dist-upgrade closure (hand kits do not read apt_refresh)."
+    },
+    {
+      "min_version": "10.42-4ubuntu2.2",
+      "package": "libpcre2-8-0",
+      "reason": "CVE-2026-86145, CVE-2026-89156, CVE-2026-89157, CVE-2026-89158, CVE-2026-89160, CVE-2026-89161, CVE-2026-103111 (medium): libpcre2-8-0 10.42-4ubuntu2.1 -> 10.42-4ubuntu2.2; v3.7.16-CE-ubuntu24.04-r1 had 10.42-4ubuntu2.1 (daily scan 2026-11-07), the same floor caddy carries (3160a027). Mirrored in product-kits/traefik/build/Dockerfile.vendor as a fail-closed check of the dist-upgrade closure (hand kits do not read apt_refresh)."
+    },
+    {
+      "min_version": "2.39-0ubuntu8.12",
+      "package": "libc6",
+      "reason": "USN-9065-1 (UBUNTU-CVE-2026-84243, high): libc6 2.39-0ubuntu8.9 -> 2.39-0ubuntu8.12, published 2026-11-13, found by the CVE tick of 2026-11-13T11:20Z on v3.7.18-CE-ubuntu24.04-r1. Mirrored in product-kits/traefik/build/Dockerfile.vendor as a fail-closed `atleast` check of the vendored packages (hand kits do not read apt_refresh)."
+    }
+  ],
+  "binaries_from_component_images": [],
+  "binaries_from_source": [
+    {
+      "build_tags": [],
+      "cgo_enabled": 0,
+      "ldflags": "-s -w -X github.com/traefik/traefik/v3/pkg/version.Version=@VERSION_BARE@",
+      "main_pkg": "./cmd/traefik",
+      "name": "traefik",
+      "out_path": "/usr/bin/traefik",
+      "verify_subcmd": "version"
+    }
+  ],
+  "build_method": "source-rebuild-go",
+  "chain_id": 1099,
+  "dep_bumps": [
+    {
+      "module": "golang.org/x/crypto",
+      "to": "v0.58.0",
+      "why": "moves with the x/net v0.62.0 floor: x/net v0.62.0 requires x/crypto v0.58.0, and upstream v3.7.17's own go.mod requires v0.58.0 (v3.7.16 had v0.57.0, this floor's previous value). The floor names that value so held() checks it; OSV: only GO-2026-5932 (x/crypto/openpgp, no fix, not imported by traefik). Mirrored in product-kits/traefik/build/Dockerfile.vendor as a raise-only floor() checked by held() after `go mod tidy` (hand kits do not read dep_bumps)."
+    },
+    {
+      "module": "golang.org/x/net",
+      "to": "v0.62.0",
+      "why": "CVE-2026-78661 / GO-2026-6860 (HIGH, published 2026-10-27) and GO-2026-6866 (medium): golang.org/x/net below 0.62.0. v3.7.16-CE-ubuntu24.04-r1 had 0.60.0 (this floor's previous value, the Go 1.26.9 companion of 2026-10-11); found by the CVE tick of 2026-11-07 (grype 0.120.1, db built 2026-11-06T06:21Z) on v3.7.16-CE-ubuntu24.04-r1. Upstream v3.7.17's own go.mod requires v0.62.0 (#14176), so the floor is a guard that equals upstream. Mirrored in product-kits/traefik/build/Dockerfile.vendor as a raise-only floor() checked by held() after `go mod tidy` (hand kits do not read dep_bumps)."
+    },
+    {
+      "module": "golang.org/x/sys",
+      "to": "v0.49.0",
+      "why": "moves with the x/net v0.62.0 floor: x/net v0.62.0 requires x/sys v0.49.0, and upstream v3.7.17's own go.mod requires v0.49.0 (v3.7.16 had v0.48.0, this floor's previous value); the floor names that value so held() checks it. Mirrored in product-kits/traefik/build/Dockerfile.vendor as a raise-only floor() checked by held() after `go mod tidy` (hand kits do not read dep_bumps)."
+    },
+    {
+      "module": "golang.org/x/text",
+      "to": "v0.43.0",
+      "why": "moves with the x/net v0.62.0 floor: x/net v0.62.0 requires x/text v0.43.0, and upstream v3.7.17's own go.mod requires v0.43.0 (v3.7.16 had v0.42.0, this floor's previous value); the floor names that value so held() checks it. Mirrored in product-kits/traefik/build/Dockerfile.vendor as a raise-only floor() checked by held() after `go mod tidy` (hand kits do not read dep_bumps)."
+    },
+    {
+      "module": "google.golang.org/grpc",
+      "to": "v1.83.2",
+      "why": "GHSA-hrxh-6v49-42gf (HIGH, CVSS 8.8, uncaught exception) \u2014 fixed in 1.82.1. Fleet-wide: the same advisory blocked caddy r2, etcd and woodpecker at verdict. Applied pre-emptively from the upstream go.mod rather than after a wasted drive. | RAISED to v1.83.2 2026-09-30: minio chain 468 verdict (grpc 1.83.1 -> 1.83.2 fixable C/H) | 2026-10-04 chain 475: the HAND KIT still ran `go get grpc@v1.82.1` (the floor raise above never reached it \u2014 hand kits ignore dep_bumps and _dep_bump_lint matches module names only). Against v3.7.13's own v1.83.2 that was a DOWNGRADE: MVS pulled lego/v5 v5.4.1 -> v5.4.0 and pkg/provider/acme failed to compile (unknown field EnableCommonName). Kit now applies v1.83.2 as a floor() (raise-only); it equals upstream at v3.7.13, so it is a no-op guard."
+    },
+    {
+      "module": "github.com/andybalholm/brotli",
+      "to": "v1.2.7",
+      "why": "GO-2026-6888 / CVE-2026-111497 (CRITICAL, on CISA's Known Exploited Vulnerabilities list; the fix published 2026-11-05T22:55Z): github.com/andybalholm/brotli below 1.2.7. v3.7.16-CE-ubuntu24.04-r1 had v1.2.2; found by the CVE tick of 2026-11-07 (grype 0.120.1, db built 2026-11-06T06:21Z) on v3.7.16-CE-ubuntu24.04-r1. Upstream v3.7.17's own go.mod requires v1.2.7 (#14137), so the floor is a guard that equals upstream; Core's 48 h window for this fix ends 2026-11-07T22:55Z. Mirrored in product-kits/traefik/build/Dockerfile.vendor as a raise-only floor() checked by held() after `go mod tidy` (hand kits do not read dep_bumps)."
+    },
+    {
+      "module": "github.com/klauspost/compress",
+      "to": "v1.20.3",
+      "why": "GO-2026-6865 / CVE-2026-116591 (HIGH): github.com/klauspost/compress below 1.20.2. v3.7.16-CE-ubuntu24.04-r1 had v1.19.2; found by the CVE tick of 2026-11-07 (grype 0.120.1, db built 2026-11-06T06:21Z) on v3.7.16-CE-ubuntu24.04-r1. Upstream v3.7.17's go.mod requires the pseudo-version v1.20.4-0.20261021124103-35c6f98a5cb9 (a commit after v1.20.3, for klauspost/compress#1272), which the raise-only floor keeps; floored at v1.20.3, the version caddy and prometheus are floored at, so held() fails if a later resolution ever falls below it. Mirrored in product-kits/traefik/build/Dockerfile.vendor as a raise-only floor() checked by held() after `go mod tidy` (hand kits do not read dep_bumps)."
+    }
+  ],
+  "expected_residuals": [],
+  "images": [
+    {
+      "digest": "sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea",
+      "ref": "golang:1.27.4-bookworm",
+      "role": "builder"
+    },
+    {
+      "digest": "sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea",
+      "ref": "golang:1.27.4-bookworm",
+      "role": "offline_builder"
+    }
+  ],
+  "mod_replaces": [],
+  "runtime_base": {
+    "hand_kit": true,
+    "kind": "chisel",
+    "provides": [
+      "getcap",
+      "setcap",
+      "capsh",
+      "getpcaps"
+    ],
+    "shell": true,
+    "slices": [
+      "libcap2-bin_bins"
+    ],
+    "tools": [
+      "chown",
+      "openssl"
+    ]
+  },
+  "schema": "kitforge.toolchain_lock.v1",
+  "slug": "traefik",
+  "source": {
+    "builder_image": "golang:1.27.4-bookworm",
+    "commit": "7dafd6dba371bd1aee70c443c2975c229c969711",
+    "commit_epoch": 1794478446,
+    "go_module_root": "github.com/traefik/traefik/v3 (built from the cloned source: go build ./cmd/traefik)",
+    "go_version_required": "1.27.0",
+    "ref": "v3.7.19",
+    "repo": "https://github.com/traefik/traefik",
+    "source_date_epoch": 1794880034,
+    "source_date_epoch_basis": "release-cut",
+    "source_date_epoch_provenance": "the time release v3.7.19-CE-ubuntu24.04-r1 was cut (2026-11-17T01:47:14Z), by scripts/retarget.py: ReadyStack dates an image by when its release was packaged (owner 2026-11-10), recorded here once and used by every rebuild of the release; it builds upstream commit 7dafd6dba371, dated 2026-11-12T10:14:06Z (source.commit_epoch)."
+  },
+  "version": "v3.7.19"
+}

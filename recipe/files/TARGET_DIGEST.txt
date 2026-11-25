@@ -1,0 +1,6 @@
+image_manifest_digest=sha256:065141024d7a6cae6a2288f425f0587511e9e913dd3db36ab51be39560047413
+config_digest=sha256:1210f82b7e994b10cf2f5aa44b8c69f04c76309a302e932fcfdfb84411c54127
+tag=readystack/traefik:v3.7.19-CE-ubuntu24.04-r1
+probe_port=8080
+probe_path=/ping
+probe_timeout=180

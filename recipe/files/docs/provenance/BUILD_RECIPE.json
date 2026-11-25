@@ -1,0 +1,61 @@
+{
+  "schema": "kitforge.build_recipe.v1",
+  "slug": "traefik",
+  "image": "readystack/traefik:v3.7.19-CE-ubuntu24.04-r1",
+  "build_method": "source-rebuild-go",
+  "source": {
+    "repo": "https://github.com/traefik/traefik",
+    "ref": "v3.7.19",
+    "go_module_root": "github.com/traefik/traefik/v3 (built from the cloned source: go build ./cmd/traefik)",
+    "go_version_required": "1.27.0",
+    "builder_image": "golang:1.27.4-bookworm",
+    "source_date_epoch": 1794880034,
+    "source_date_epoch_provenance": "the time release v3.7.19-CE-ubuntu24.04-r1 was cut (2026-11-17T01:47:14Z), by scripts/retarget.py: ReadyStack dates an image by when its release was packaged (owner 2026-11-10), recorded here once and used by every rebuild of the release; it builds upstream commit 7dafd6dba371, dated 2026-11-12T10:14:06Z (source.commit_epoch).",
+    "commit": "7dafd6dba371bd1aee70c443c2975c229c969711",
+    "commit_epoch": 1794478446,
+    "source_date_epoch_basis": "release-cut"
+  },
+  "binaries_from_source": [
+    {
+      "name": "traefik",
+      "main_pkg": "./cmd/traefik",
+      "cgo_enabled": 0,
+      "build_tags": [],
+      "ldflags": "-s -w -X github.com/traefik/traefik/v3/pkg/version.Version=@VERSION_BARE@",
+      "out_path": "/usr/bin/traefik",
+      "verify_subcmd": "version"
+    }
+  ],
+  "runtime_packages": [
+    "base-files",
+    "base-passwd",
+    "ca-certificates",
+    "coreutils",
+    "dash",
+    "libc6",
+    "libcap2",
+    "libcap2-bin",
+    "libssl3t64",
+    "openssl",
+    "tzdata"
+  ],
+  "runtime_base": {
+    "kind": "chisel",
+    "shell": true,
+    "tools": [
+      "chown",
+      "openssl"
+    ],
+    "slices": [
+      "libcap2-bin_bins"
+    ],
+    "provides": [
+      "getcap",
+      "setcap",
+      "capsh",
+      "getpcaps"
+    ],
+    "hand_kit": true,
+    "packages": "vendored/chisel/packages.tsv"
+  }
+}

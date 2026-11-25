@@ -1,0 +1,38 @@
+{
+  "bases": [
+    {
+      "digest": "sha256:fb7cceb528b47141eccd9b60bf3cbd27d5ef5f8cf5b7d338bec866da495b50dc",
+      "layout": "bases/golang_1.27.4-bookworm_4fa7c968ba93.oci",
+      "ref": "golang:1.27.4-bookworm@sha256:4fa7c968ba93f1635670522dbb01a2c78150443e1385746924566079f36570ea"
+    },
+    {
+      "digest": "sha256:77eb101c607d6e3d4f5ad0c8a02c2136c689b98aba1f359e6502ba517e5c57ec",
+      "layout": "bases/ubuntu_24.04_2198e4c65076.oci",
+      "ref": "ubuntu:24.04@sha256:2198e4c65076e9cb0b3d695219df667c0e3b0072da64ca3c2648aca17dcecaf5"
+    }
+  ],
+  "engine": {
+    "archive": "toolchain/buildkit.tar",
+    "image_digest": "sha256:e0e67ea9c4bb07bdef683e29f70f3b623d1eb9c82274a9ec04e6bb0511449fb0",
+    "kind": "buildkit",
+    "tag": "moby/buildkit:v0.31.2"
+  },
+  "inputs": {
+    "context": ".",
+    "dockerfile": "Dockerfile.offline.pinned",
+    "mtime_policy": "clamp",
+    "source_date_epoch": 1794880034,
+    "tree_hash": "sha256:7992c7d89ea36cfd94717775dd6d503c7ba5a59baab72d54351c003f75941517"
+  },
+  "probe": {
+    "http_path": "/ping",
+    "port": 8080,
+    "timeout_s": 180
+  },
+  "schema": "readystack-rebuild-bundle/v0.1",
+  "subject": {
+    "config_digest": "sha256:1210f82b7e994b10cf2f5aa44b8c69f04c76309a302e932fcfdfb84411c54127",
+    "image_manifest_digest": "sha256:065141024d7a6cae6a2288f425f0587511e9e913dd3db36ab51be39560047413",
+    "name": "docker.io/readystack/traefik:v3.7.19-CE-ubuntu24.04-r1"
+  }
+}

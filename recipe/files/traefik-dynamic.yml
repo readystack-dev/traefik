@@ -1,0 +1,8 @@
+# Minimal dynamic configuration for the ReadyStack Traefik image.
+# Routers / services are normally supplied at runtime by a provider (docker,
+# kubernetes, file). This empty configuration lets Traefik boot cleanly so the
+# build's boot/health probe (GET http://127.0.0.1:8080/ping -> "OK") passes with
+# no extra configuration. Replace or mount your own dynamic config in production.
+# An empty map, not empty http.routers/middlewares/services: Traefik rejects those as
+# "standalone elements" and logged an ERR line on every boot (audit 2026-09-30).
+{}

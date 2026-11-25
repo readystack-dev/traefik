@@ -1,0 +1,9 @@
+{
+  "schema": "kitforge.source_tree_hash.v1",
+  "slug": "traefik",
+  "repo": "https://github.com/traefik/traefik",
+  "ref": "v3.7.19",
+  "commit": "7dafd6dba371bd1aee70c443c2975c229c969711",
+  "tree_listing_sha256": "c07ba91b2cf34a1f7cc70fb1926065c46dd93bd14466f47b335f4ce8f0ad25c4",
+  "file_count": 2332
+}
